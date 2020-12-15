@@ -1,0 +1,97 @@
+start: expr*
+      | statement*
+      | block*
+      | args*
+      | loopexpr*
+
+?statement: "print" "(" expr ")" SEMICOLON  -> print_statement
+          | "print" "(" statement ")" SEMICOLON -> print_statement
+          | "input" "(" expr ")" ";"  -> input_statement
+          | NAME "=" expr ";"      -> assign_var
+          | NAME "=" "input" "(" expr ")" ";" -> var_input_statement
+          | NAME "=" NAME "(" ")" ";"         -> var_function_statement
+          | NAME "[" expr "]" "=" expr ";"    -> assign_dict_value
+          | "if" expr "==" expr  block  -> if_statement
+          | "if" expr "==" expr block "else" block -> if_else_statement
+          | "if" expr "==" expr "or" expr "==" expr block -> or_if_statement
+          | "while" expr block     -> while_loop
+          | "while" expr "==" expr block  -> conditional_loop
+          | "for" loopexpr block          -> for_loop
+          | "function" NAME "(" ")" funcblock -> no_argument_function
+          | "function" NAME args funcblock   -> argument_function
+          | NAME "(" ")" ";"              -> no_argument_call_function
+          | NAME "(" expr ("," expr)* ")" ";"   -> argument_call_function
+          | "exit" "(" ")" ";"            -> exit_statement
+          | "exit" "(" expr ")" ";"       -> exit_statement
+          | "wait" "(" expr ")" ";"       -> wait
+          | "import" "(" NAME ("," NAME)* ")" ";"         -> import_statement
+          | NAME"."NAME "("")" ";"        -> module_function
+          | NAME"."NAME "(" expr ("," expr)* ")" ";"           -> module_argument_function
+          | "include" "(" NAME ("," NAME)* ")" ";"        -> include_statement
+          | NAME".""Evaluator" "(" expr ("," expr)* ")" ";"    -> include_evaluator
+          | "return" "(" expr+ ")" ";"                    -> return_statement
+          | "return" "(" statement+ ")" ";"               -> return_statement
+
+
+?expr: STRING            -> string
+     | MULTILINE_STRING  -> triple_string
+     | NUMBER            -> number
+     | "[" [expr ("," expr)*] "]" -> array
+     | "{" expr ":" expr"}" -> dictionary
+     | NUMBER "+" NUMBER -> add
+     | NUMBER "-" NUMBER -> sub
+     | NUMBER "*" NUMBER -> mul
+     | NUMBER "/" NUMBER -> div
+     | STRING "+" STRING -> str_add
+     | NAME              -> get_var
+     | NAME "+" NAME     -> var_add
+     | NAME "-" NAME     -> var_sub
+     | NAME "*" NAME     -> var_mul
+     | NAME "/" NAME     -> var_div
+     | "true"            -> true
+     | "false"           -> false
+     | "sum" "(" expr ")"  -> sum_expr
+     | "random_integer" "(" expr "," expr ")"  -> random_integer
+     | "read_file" "(" expr ")"   -> read_file
+     | "doc" "(" expr ")"            -> doc
+     | NAME "[" expr "]"             -> get_index_value
+     | "mean" "(" expr ")"          -> mean
+     | "square_root" "(" NUMBER ")"   -> square_root
+     | "path_exists" "(" expr ")"     -> path_exists
+     | "range" "(" expr ")"           -> range_expr
+     | "hash" "(" expr ")"            -> hash_expr
+     | NAME"."NAME "("")"         -> module_function
+     | NAME"."NAME "(" expr ("," expr)* ")"           -> module_argument_function
+     | "keys" "(" NAME ")"        -> get_dict_keys
+     | NAME".""keys"              -> get_dict_keys
+     | "get_index" "(" NAME "," expr ")"    -> get_index
+     | "type" "(" expr ")"        -> get_type
+     | NAME "(" ")"               -> no_argument_call_function
+     | NAME "(" expr ("," expr)* ")"    -> argument_call_function
+
+
+block: "{" expr+ "}"
+     | "{" statement+ "}"
+
+args: "(" [NAME ("," NAME)*] ")"
+
+funcblock: "{" expr+ "}"
+         | "{" statement+ "}"
+
+loopexpr: NAME "in" expr
+
+SEMICOLON: ";"
+
+TRIPLE_QUOTE: /"""/
+
+MULTILINE_STRING: TRIPLE_QUOTE /(.|\n|\r|[a-zA-Z0-9_.-]{2,}])+/ TRIPLE_QUOTE
+
+%import common.ESCAPED_STRING -> STRING 
+%import common.NUMBER
+%import common.CNAME -> NAME
+%declare _INDENT _DEDENT
+%import common.WS_INLINE
+%ignore WS_INLINE
+%import common.NEWLINE -> _NL
+%ignore _NL
+%ignore "//" /[^\n]*/
