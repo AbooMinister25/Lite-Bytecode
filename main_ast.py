@@ -21,7 +21,7 @@ class BinOp(Ast):
     def compile(self):
         instructions["instructions"].append(("LOAD_VALUE", 0))
         instructions["numbers"].append(self.left)
-        instructions["instructions"].append(("LOAD_VALUE", 0))
+        instructions["instructions"].append(("LOAD_VALUE", 1))
         instructions["numbers"].append(self.right)
         if self.op == "+":
             instructions["instructions"].append(("ADD_TWO_VALUES", None))

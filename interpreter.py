@@ -28,8 +28,8 @@ class Machine:
         self.stack.append(total)
     
     def SUB_TWO_VALUES(self):
-        first_num = self.stack.pop()
         second_num = self.stack.pop()
+        first_num = self.stack.pop()
         total = first_num - second_num
         self.stack.append(total)
 
@@ -40,8 +40,9 @@ class Machine:
         self.stack.append(total)
 
     def DIV_TWO_VALUES(self):
-        first_num = self.stack.pop()
+        print(self.stack)
         second_num = self.stack.pop()
+        first_num = self.stack.pop()
         total = first_num / second_num
         self.stack.append(total)
     
@@ -68,16 +69,14 @@ class Machine:
             if argument is None:
                 bytecode_method()
             else:
-                bytecode_method(argument)
-                
+                bytecode_method(argument)                
 
 parser = Lark.open('grammar.lark', parser="lalr")
 
 
-lite_code = 'print(4-2);'
+lite_code = 'print(10-5);'
 tree = parser.parse(lite_code)
 x = LiteTransformer().transform(tree)
 x.compile()
 interpreter = Machine()
 interpreter.execute(instructions)
-
