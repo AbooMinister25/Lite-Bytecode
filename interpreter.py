@@ -45,10 +45,15 @@ class Machine:
         self.stack.append(total)
 
     def DIV_TWO_VALUES(self):
-        print(self.stack)
         second_num = self.stack.pop()
         first_num = self.stack.pop()
         total = first_num / second_num
+        self.stack.append(total)
+    
+    def ADD_STRINGS(self):
+        second_num = self.stack.pop()
+        first_num = self.stack.pop()
+        total = first_num + second_num
         self.stack.append(total)
     
     def parse_argument(self, instruction, argument, what_to_execute):
@@ -59,7 +64,10 @@ class Machine:
             try:
                 argument = what_to_execute["numbers"][argument]
             except:
-                argument = what_to_execute["strings"][argument]
+                try:
+                    argument = what_to_execute["strings"][argument]
+                except:
+                    argument = what_to_execute["arrays"][argument]
         elif instruction in names:
             argument = what_to_execute["names"][argument]
         
@@ -81,11 +89,8 @@ parser = Lark.open('grammar.lark', parser="lalr")
 
 with open("test.lite", "r") as f:
     lite_code = f.read()
-before = time.time()
 tree = parser.parse(lite_code)
 x = LiteTransformer().transform(tree)
 x.compile()
 interpreter = Machine()
 interpreter.execute(instructions)
-difference = time.time() - before
-print(difference)

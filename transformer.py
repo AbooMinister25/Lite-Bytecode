@@ -18,6 +18,9 @@ class LiteTransformer(Transformer):
     def triple_string(self, value):
         return TripleQuoteString(value)
     
+    def array(self, *value):
+        return Array(value)
+    
     def number(self, value):
         return Integer(value)
 
@@ -32,6 +35,9 @@ class LiteTransformer(Transformer):
 
     def div(self, val1, val2):
         return BinOp(val1, "/", val2)
+    
+    def str_add(self, val1, val2):
+        return StringAdd(val1, val2)
 
     def print_statement(self, value, semicolon):
         return Print(value)

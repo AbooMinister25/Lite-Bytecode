@@ -5,7 +5,8 @@ class Instructions:
     instructions = {
         "instructions": [],
         "numbers": [],
-        "strings": []
+        "strings": [],
+        "arrays": []
 }
 
 
@@ -31,6 +32,19 @@ class BinOp(Ast):
             instructions["instructions"].append(("MUL_TWO_VALUES", None))
         elif self.op == "/":
             instructions["instructions"].append(("DIV_TWO_VALUES", None))
+
+
+class StringAdd(Ast):
+    def __init__(self, left, right):
+        self.left = str(left).strip('"')
+        self.right = str(right).strip('"')
+    
+    def compile(self):
+        instructions["instructions"].append(("LOAD_VALUE", 0))
+        instructions["strings"].append(self.left)
+        instructions["instructions"].append(("LOAD_VALUE", 1))
+        instructions["strings"].append(self.right)
+        instructions["instructions"].append(("ADD_STRINGS", None))
 
 
 class Print(Ast):
@@ -77,6 +91,17 @@ class Integer(Ast):
     def compile(self):
         instructions["instructions"].append(("LOAD_VALUE", 0))
         instructions["numbers"].append(self.value)
+
+
+
+class Array(Ast):
+    def __init__(self, value):
+        self.value = list(value)
+    
+    def compile(self):
+        instructions["instructions"].append(("LOAD_VALUE", 0))
+        instructions["arrays"].append([val.compile() for val in self.value])
+        x = [val.compile() for val in self.value]
 
 
 class Start(Ast):
