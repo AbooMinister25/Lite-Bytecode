@@ -1,13 +1,16 @@
 class Ast:
     pass
 
+
 class Instructions:
     instructions = {
         "instructions": [],
         "numbers": [],
         "strings": [],
-        "arrays": []
-}
+        "arrays": [],
+        "dicts": [],
+        "names": []
+    }
 
 
 instructions = Instructions.instructions
@@ -38,7 +41,7 @@ class StringAdd(Ast):
     def __init__(self, left, right):
         self.left = str(left).strip('"')
         self.right = str(right).strip('"')
-    
+
     def compile(self):
         instructions["instructions"].append(("LOAD_VALUE", 0))
         instructions["strings"].append(self.left)
@@ -59,7 +62,7 @@ class Print(Ast):
 class Input():
     def __init__(self, value):
         self.value = value
-    
+
     def compile(self):
         self.value.compile()
         instructions["instructions"].append(("INPUT_VALUE", None))
@@ -68,7 +71,7 @@ class Input():
 class String(Ast):
     def __init__(self, value):
         self.value = str(value).strip('"')
-    
+
     def compile(self):
         instructions["instructions"].append(("LOAD_VALUE", 0))
         instructions["strings"].append(self.value)
@@ -78,7 +81,7 @@ class TripleQuoteString(Ast):
     def __init__(self, value):
         self.value = value.strip()
         self.value = value.strip('"')
-    
+
     def compile(self):
         instructions["instructions"].append(("LOAD_VALUE", 0))
         instructions["strings"].append(self.value)
@@ -87,21 +90,47 @@ class TripleQuoteString(Ast):
 class Integer(Ast):
     def __init__(self, value):
         self.value = int(value)
-    
+
     def compile(self):
         instructions["instructions"].append(("LOAD_VALUE", 0))
         instructions["numbers"].append(self.value)
 
 
-
 class Array(Ast):
     def __init__(self, value):
-        self.value = list(value)
-    
+        self.value = []
+        for val in value:
+            if type(val) == Integer:
+                self.value.append(val.value)
+            elif type(val) == String:
+                self.value.append(val.value)
+            elif type(val) == Array:
+                self.value.append(val.value)
+
     def compile(self):
         instructions["instructions"].append(("LOAD_VALUE", 0))
         instructions["arrays"].append([val for val in self.value])
-        x = [val.compile() for val in self.value]
+
+
+class Dict(Ast):
+    def __init__(self, key, value):
+        self.key = key.value
+        self.value = value.value
+
+    def compile(self):
+        instructions["instructions"].append(("LOAD_VALUE", 0))
+        instructions["dicts"].append(dict({self.key: self.value}))
+
+
+class AssignVariable(Ast):
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+    
+    def compile(self):
+        self.value.compile()
+        instructions["instructions"].append(("STORE_NAME", 0))
+        instructions["names"].append(self.name)
 
 
 class Start(Ast):

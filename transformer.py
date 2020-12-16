@@ -21,8 +21,14 @@ class LiteTransformer(Transformer):
     def array(self, *value):
         return Array(value)
     
+    def dictionary(self, key, value):
+        return Dict(key, value)
+    
     def number(self, value):
         return Integer(value)
+    
+    def assign_var(self, name, value):
+        AssignVariable(name, value)
 
     def add(self, val1, val2):
         return BinOp(val1, "+", val2)

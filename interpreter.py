@@ -1,10 +1,12 @@
 from transformer import LiteTransformer, instructions
+from environment import Env
 from lark import Lark
 import time
 
 class Machine:
-    def __init__(self):
+    def __init__(self, env):
         self.stack = []
+        self.env = env
         self.environment = {}
     
     def LOAD_VALUE(self, value):
@@ -20,7 +22,7 @@ class Machine:
     
     def STORE_NAME(self, name):
         val = self.stack.pop()
-        self.environment[name] = val
+        self.environment.assign
     
     def LOAD_NAME(self, name):
         val = self.environment[name]
@@ -67,7 +69,10 @@ class Machine:
                 try:
                     argument = what_to_execute["strings"][argument]
                 except:
-                    argument = what_to_execute["arrays"][argument]
+                    try:
+                        argument = what_to_execute["arrays"][argument]
+                    except:
+                        argument = what_to_execute["dicts"][argument]
         elif instruction in names:
             argument = what_to_execute["names"][argument]
         
@@ -92,5 +97,5 @@ with open("test.lite", "r") as f:
 tree = parser.parse(lite_code)
 x = LiteTransformer().transform(tree)
 x.compile()
-interpreter = Machine()
+interpreter = Machine(Env())
 interpreter.execute(instructions)
