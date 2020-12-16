@@ -100,7 +100,7 @@ class Array(Ast):
     
     def compile(self):
         instructions["instructions"].append(("LOAD_VALUE", 0))
-        instructions["arrays"].append([val.compile() for val in self.value])
+        instructions["arrays"].append([val for val in self.value])
         x = [val.compile() for val in self.value]
 
 
