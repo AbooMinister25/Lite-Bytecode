@@ -15,6 +15,9 @@ class LiteTransformer(Transformer):
         value = str(value).strip('"')
         return String(value)
     
+    def triple_string(self, value):
+        return TripleQuoteString(value)
+    
     def number(self, value):
         return Integer(value)
 
@@ -32,6 +35,9 @@ class LiteTransformer(Transformer):
 
     def print_statement(self, value, semicolon):
         return Print(value)
+    
+    def input_statement(self, value):
+        return Input(value)
     
     def start(self, *statements):
         return Start(statements)

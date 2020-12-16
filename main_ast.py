@@ -42,9 +42,28 @@ class Print(Ast):
         instructions["instructions"].append(("PRINT_VALUE", None))
 
 
+class Input():
+    def __init__(self, value):
+        self.value = value
+    
+    def compile(self):
+        self.value.compile()
+        instructions["instructions"].append(("INPUT_VALUE", None))
+
+
 class String(Ast):
     def __init__(self, value):
         self.value = str(value).strip('"')
+    
+    def compile(self):
+        instructions["instructions"].append(("LOAD_VALUE", 0))
+        instructions["strings"].append(self.value)
+
+
+class TripleQuoteString(Ast):
+    def __init__(self, value):
+        self.value = value.strip()
+        self.value = value.strip('"')
     
     def compile(self):
         instructions["instructions"].append(("LOAD_VALUE", 0))
@@ -60,7 +79,7 @@ class Integer(Ast):
         instructions["numbers"].append(self.value)
 
 
-class Start():
+class Start(Ast):
     def __init__(self, statements):
         self.statements = statements
 

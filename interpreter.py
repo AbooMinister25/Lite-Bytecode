@@ -1,5 +1,6 @@
 from transformer import LiteTransformer, instructions
 from lark import Lark
+import time
 
 class Machine:
     def __init__(self):
@@ -12,6 +13,10 @@ class Machine:
     def PRINT_VALUE(self):
         answer = self.stack.pop()
         print(answer)
+    
+    def INPUT_VALUE(self):
+        answer = self.stack.pop()
+        input(answer)
     
     def STORE_NAME(self, name):
         val = self.stack.pop()
@@ -74,9 +79,13 @@ class Machine:
 parser = Lark.open('grammar.lark', parser="lalr")
 
 
-lite_code = 'print(10-5);'
+with open("test.lite", "r") as f:
+    lite_code = f.read()
+before = time.time()
 tree = parser.parse(lite_code)
 x = LiteTransformer().transform(tree)
 x.compile()
 interpreter = Machine()
 interpreter.execute(instructions)
+difference = time.time() - before
+print(difference)
