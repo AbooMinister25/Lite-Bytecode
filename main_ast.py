@@ -147,6 +147,7 @@ class GetIndexValue():
         self.value = value
 
     def compile(self):
+        self.value.compile()
         instructions["instructions"].append(("LOAD_INDEX", 0))
 
 
