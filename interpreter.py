@@ -29,9 +29,8 @@ class Machine:
         self.stack.append(val)
     
     def LOAD_INDEX(self, name):
-        val = self.stack.pop()
-        print(self.env.get_variable(name))
-        self.stack.append(self.env.get_array_index(name, val))
+        print(self.env.variables)
+        self.stack.append(self.env.get_array_index(name, self.stack.pop()))
     
     def ADD_TWO_VALUES(self):
         first_num = self.stack.pop()

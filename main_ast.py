@@ -148,7 +148,6 @@ class GetIndexValue():
 
     def compile(self):
         instructions["instructions"].append(("LOAD_INDEX", 0))
-        instructions["names"].append(self.name)
 
 
 class Start(Ast):
