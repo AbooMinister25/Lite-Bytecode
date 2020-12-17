@@ -22,11 +22,15 @@ class Machine:
     
     def STORE_NAME(self, name):
         val = self.stack.pop()
-        self.environment.assign
+        self.env.assign_variable(name, val)
     
     def LOAD_NAME(self, name):
-        val = self.environment[name]
+        val = self.env.get_variable(name)
         self.stack.append(val)
+    
+    def LOAD_INDEX(self, name):
+        val = self.stack.pop()
+        self.env.get_array_index(name, val)
     
     def ADD_TWO_VALUES(self):
         first_num = self.stack.pop()

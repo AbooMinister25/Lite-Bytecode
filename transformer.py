@@ -51,6 +51,15 @@ class LiteTransformer(Transformer):
     def input_statement(self, value):
         return Input(value)
     
+    def assign_var(self, name, value):
+        return AssignVariable(name, value)
+    
+    def get_var(self, name):
+        return GetVariable(name)
+    
+    def get_index_value(self, name, index):
+        return GetIndexValue(name, index)
+    
     def start(self, *statements):
         return Start(statements)
 
