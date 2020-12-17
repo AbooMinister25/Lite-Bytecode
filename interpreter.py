@@ -30,7 +30,8 @@ class Machine:
     
     def LOAD_INDEX(self, name):
         val = self.stack.pop()
-        self.env.get_array_index(name, val)
+        print(self.env.get_variable(name))
+        self.stack.append(self.env.get_array_index(name, val))
     
     def ADD_TWO_VALUES(self):
         first_num = self.stack.pop()
@@ -64,7 +65,7 @@ class Machine:
     
     def parse_argument(self, instruction, argument, what_to_execute):
         values = ["LOAD_VALUE"]
-        names = ["LOAD_NAME", "STORE_NAME"]
+        names = ["LOAD_NAME", "STORE_NAME", "LOAD_INDEX"]
         
         if instruction in values:
             try:

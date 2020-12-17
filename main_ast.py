@@ -109,7 +109,7 @@ class Array(Ast):
 
     def compile(self):
         instructions["instructions"].append(("LOAD_VALUE", 0))
-        instructions["arrays"].append([val for val in self.value])
+        instructions["arrays"].append(list([val for val in self.value]))
 
 
 class Dict(Ast):
@@ -126,7 +126,7 @@ class AssignVariable(Ast):
     def __init__(self, name, value):
         self.name = name
         self.value = value
-    
+
     def compile(self):
         self.value.compile()
         instructions["instructions"].append(("STORE_NAME", 0))
@@ -136,7 +136,7 @@ class AssignVariable(Ast):
 class GetVariable(Ast):
     def __init__(self, name):
         self.name = name
-    
+
     def compile(self):
         instructions["instructions"].append(("LOAD_NAME", 0))
 
@@ -145,9 +145,8 @@ class GetIndexValue():
     def __init__(self, name, value):
         self.name = name
         self.value = value
-    
+
     def compile(self):
-        self.value.compile()
         instructions["instructions"].append(("LOAD_INDEX", 0))
         instructions["names"].append(self.name)
 
