@@ -21,15 +21,14 @@ class Machine:
         input(answer)
     
     def STORE_NAME(self, name):
-        val = self.stack.pop()
-        self.env.assign_variable(name, val)
+        value = self.stack.pop()
+        self.env.assign_variable(name, value)
     
     def LOAD_NAME(self, name):
         val = self.env.get_variable(name)
         self.stack.append(val)
     
     def LOAD_INDEX(self, name):
-        print(self.env.variables)
         self.stack.append(self.env.get_array_index(name, self.stack.pop()))
     
     def ADD_TWO_VALUES(self):
@@ -91,7 +90,25 @@ class Machine:
             if argument is None:
                 bytecode_method()
             else:
-                bytecode_method(argument)                
+                bytecode_method(argument)
+    
+    def test_execute(self, what_to_execute):
+        instructions = what_to_execute["instructions"]
+        print(f"Instructions:   {instructions}")
+        for each_step in instructions:
+            print("Cycle:     (")
+            print(f"    Current Step:   {each_step}")
+            print(f"    Current Stack:  {self.stack}")
+            instruction, argument = each_step
+            argument = self.parse_argument(instruction, argument, what_to_execute)
+            print(f"    Current Argument:   {argument}")
+            bytecode_method = getattr(self, instruction)
+            print("    Code Output:")
+            if argument is None:
+                bytecode_method()
+            else:
+                bytecode_method(argument)
+            print(")")
 
 parser = Lark.open('grammar.lark', parser="lalr")
 
