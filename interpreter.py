@@ -2,6 +2,7 @@ from transformer import LiteTransformer, instructions
 from environment import Env
 from lark import Lark
 import time
+import dis
 
 class Machine:
     def __init__(self, env):
@@ -21,6 +22,7 @@ class Machine:
         input(answer)
     
     def STORE_NAME(self, name):
+        print(self.stack)
         value = self.stack.pop()
         self.env.assign_variable(name, value)
     
@@ -78,7 +80,7 @@ class Machine:
                         argument = what_to_execute["dicts"][argument]
         elif instruction in names:
             argument = what_to_execute["names"][argument]
-        
+                
         return argument
     
     def execute(self, what_to_execute):
@@ -94,21 +96,18 @@ class Machine:
     
     def test_execute(self, what_to_execute):
         instructions = what_to_execute["instructions"]
-        print(f"Instructions:   {instructions}")
+        print(f"Instructions:   {what_to_execute}")
         for each_step in instructions:
-            print("Cycle:     (")
-            print(f"    Current Step:   {each_step}")
-            print(f"    Current Stack:  {self.stack}")
             instruction, argument = each_step
             argument = self.parse_argument(instruction, argument, what_to_execute)
-            print(f"    Current Argument:   {argument}")
+            print(f"Cycle_Info(Current Step: {each_step}, Current Stack: {self.stack}, Current Argument: {argument})")
             bytecode_method = getattr(self, instruction)
-            print("    Code Output:")
+            print("Code Output:")
             if argument is None:
                 bytecode_method()
             else:
                 bytecode_method(argument)
-            print(")")
+            print("\n----------------- \n")
 
 parser = Lark.open('grammar.lark', parser="lalr")
 

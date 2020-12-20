@@ -122,15 +122,23 @@ class Dict(Ast):
         instructions["dicts"].append(dict({self.key: self.value}))
 
 
+class Name(Ast):
+    def __init__(self, value):
+        self.value = value
+    
+    def compile(self):
+        instructions["names"].append(str(self.value[0]))
+
+
 class AssignVariable(Ast):
     def __init__(self, name, value):
         self.name = name
         self.value = value
 
     def compile(self):
+        self.name.compile()
         self.value.compile()
         instructions["instructions"].append(("STORE_NAME", 0))
-        instructions["names"].append(self.name)
 
 
 class GetVariable(Ast):
