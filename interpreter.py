@@ -21,11 +21,11 @@ class Machine:
         answer = self.stack.pop()
         input(answer)
     
-    def STORE_NAME(self, name):
+    def DEFINE_LOCAL(self, name):
         value = self.stack.pop()
         self.env.assign_variable(name, value)
     
-    def LOAD_NAME(self, name):
+    def LOAD_LOCAL(self, name):
         val = self.env.get_variable(name)
         self.stack.append(val)
     

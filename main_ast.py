@@ -138,7 +138,7 @@ class AssignVariable(Ast):
     def compile(self):
         self.name.compile()
         self.value.compile()
-        instructions["instructions"].append(("STORE_NAME", 0))
+        instructions["instructions"].append(("DEFINE_LOCAL", 0))
 
 
 class GetVariable(Ast):
@@ -146,7 +146,7 @@ class GetVariable(Ast):
         self.name = name
 
     def compile(self):
-        instructions["instructions"].append(("LOAD_NAME", 0))
+        instructions["instructions"].append(("LOAD_LOCAL", 0))
 
 
 class GetIndexValue():
