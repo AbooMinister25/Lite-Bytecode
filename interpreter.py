@@ -22,7 +22,6 @@ class Machine:
         input(answer)
     
     def STORE_NAME(self, name):
-        print(self.stack)
         value = self.stack.pop()
         self.env.assign_variable(name, value)
     
