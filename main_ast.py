@@ -15,6 +15,9 @@ class Instructions:
 
 instructions = Instructions.instructions
 
+local_counter = 0
+local_load_counter = 0
+
 
 class BinOp(Ast):
     def __init__(self, left, op, right):
@@ -136,9 +139,11 @@ class AssignVariable(Ast):
         self.value = value
 
     def compile(self):
+        global local_counter
         self.name.compile()
         self.value.compile()
-        instructions["instructions"].append(("DEFINE_LOCAL", 0))
+        instructions["instructions"].append(("DEFINE_LOCAL", local_counter))
+        local_counter += 1
 
 
 class GetVariable(Ast):
@@ -146,7 +151,9 @@ class GetVariable(Ast):
         self.name = name
 
     def compile(self):
-        instructions["instructions"].append(("LOAD_LOCAL", 0))
+        global local_load_counter
+        instructions["instructions"].append(("LOAD_LOCAL", local_load_counter))
+        local_load_counter += 1
 
 
 class GetIndexValue():

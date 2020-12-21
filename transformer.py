@@ -26,9 +26,6 @@ class LiteTransformer(Transformer):
     
     def number(self, value):
         return Integer(value)
-    
-    def assign_var(self, name, value):
-        AssignVariable(name, value)
 
     def add(self, val1, val2):
         return BinOp(val1, "+", val2)
@@ -55,7 +52,7 @@ class LiteTransformer(Transformer):
         return AssignVariable(Name(name), value)
     
     def get_var(self, name):
-        return GetVariable(name)
+        return GetVariable(Name(name))
     
     def get_index_value(self, name, index):
         return GetIndexValue(name, index)

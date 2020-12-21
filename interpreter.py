@@ -2,7 +2,6 @@ from transformer import LiteTransformer, instructions
 from environment import Env
 from lark import Lark
 import time
-import dis
 
 class Machine:
     def __init__(self, env):
@@ -22,7 +21,7 @@ class Machine:
         input(answer)
     
     def DEFINE_LOCAL(self, name):
-        value = self.stack.pop()
+        value = self.stack[-1]
         self.env.assign_variable(name, value)
     
     def LOAD_LOCAL(self, name):
@@ -96,10 +95,12 @@ class Machine:
     def test_execute(self, what_to_execute):
         instructions = what_to_execute["instructions"]
         print(f"Instructions:   {what_to_execute}")
+        print("")
+        counter = 0
         for each_step in instructions:
             instruction, argument = each_step
             argument = self.parse_argument(instruction, argument, what_to_execute)
-            print(f"Cycle_Info(Current Step: {each_step}, Current Stack: {self.stack}, Current Argument: {argument})")
+            print(f"Cycle_{counter}(Current Step: {each_step}, Current Stack: {self.stack}, Current Argument: {argument})")
             bytecode_method = getattr(self, instruction)
             print("Code Output:")
             if argument is None:
@@ -107,6 +108,21 @@ class Machine:
             else:
                 bytecode_method(argument)
             print("\n----------------- \n")
+            counter += 1
+    
+    def debug(self, what_to_execute):
+        instructions = what_to_execute["instructions"]
+        for each_step in instructions:
+            instruction, argument = each_step
+            argument = self.parse_argument(instruction, argument, what_to_execute)
+            bytecode_method = getattr(self, instruction)
+            if argument is None:
+                bytecode_method()
+            else:
+                bytecode_method(argument)
+                
+            for i in self.stack:
+                print(f"[ {i} ]")
 
 parser = Lark.open('grammar.lark', parser="lalr")
 
@@ -118,3 +134,4 @@ x = LiteTransformer().transform(tree)
 x.compile()
 interpreter = Machine(Env())
 interpreter.execute(instructions)
+print(instructions)
