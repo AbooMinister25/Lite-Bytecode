@@ -67,17 +67,33 @@ class Machine:
         if instruction in values:
             try:
                 argument = what_to_execute["numbers"][argument]
+                try:
+                    what_to_execute["numbers"].remove(what_to_execute["numbers"][0])
+                except:
+                    pass
             except:
                 try:
                     argument = what_to_execute["strings"][argument]
+                    try:
+                        what_to_execute["strings"].remove(what_to_execute["strings"][0])
+                    except:
+                        pass
                 except:
                     try:
                         argument = what_to_execute["arrays"][argument]
+                        try:
+                            what_to_execute["arrays"].remove(what_to_execute["arrays"][0])
+                        except:
+                            pass
                     except:
                         argument = what_to_execute["dicts"][argument]
+                        try:
+                            what_to_execute["dicts"].remove(what_to_execute["dicts"][0])
+                        except:
+                            pass
         elif instruction in names:
             argument = what_to_execute["names"][argument]
-                
+        
         return argument
     
     def execute(self, what_to_execute):
@@ -90,6 +106,7 @@ class Machine:
                 bytecode_method()
             else:
                 bytecode_method(argument)
+                
     
     def test_execute(self, what_to_execute):
         instructions = what_to_execute["instructions"]

@@ -1,4 +1,2 @@
-x = 257;
-m = 2;
-print(x);
-print(m);
+print("Hi");
+print("Hello");
