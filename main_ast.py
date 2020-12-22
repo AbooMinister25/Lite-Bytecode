@@ -13,10 +13,17 @@ class Instructions:
     }
 
 
+class VariableValue:
+    def __init__(self):
+        self.locals = {}
+
+
+variable_value = VariableValue()
+
+
 instructions = Instructions.instructions
 
 local_counter = 0
-local_load_counter = 0
 
 
 class BinOp(Ast):
@@ -128,7 +135,7 @@ class Dict(Ast):
 class Name(Ast):
     def __init__(self, value):
         self.value = value
-    
+
     def compile(self):
         instructions["names"].append(str(self.value[0]))
 
@@ -140,9 +147,9 @@ class AssignVariable(Ast):
 
     def compile(self):
         global local_counter
-        self.name.compile()
         self.value.compile()
         instructions["instructions"].append(("DEFINE_LOCAL", local_counter))
+        variable_value.locals[self.name] = local_counter
         local_counter += 1
 
 
@@ -151,9 +158,7 @@ class GetVariable(Ast):
         self.name = name
 
     def compile(self):
-        global local_load_counter
-        instructions["instructions"].append(("LOAD_LOCAL", local_load_counter))
-        local_load_counter += 1
+        instructions["instructions"].append(("LOAD_LOCAL", variable_value.locals[self.name]))
 
 
 class GetIndexValue():

@@ -63,8 +63,7 @@ class Machine:
     
     def parse_argument(self, instruction, argument, what_to_execute):
         values = ["LOAD_VALUE"]
-        names = ["LOAD_NAME", "STORE_NAME", "LOAD_INDEX"]
-        
+        names = ["LOAD_NAME", "STORE_NAME", "LOAD_INDEX"]        
         if instruction in values:
             try:
                 argument = what_to_execute["numbers"][argument]
@@ -134,4 +133,3 @@ x = LiteTransformer().transform(tree)
 x.compile()
 interpreter = Machine(Env())
 interpreter.execute(instructions)
-print(instructions)
