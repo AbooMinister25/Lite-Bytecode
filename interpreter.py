@@ -92,7 +92,13 @@ class Machine:
                         except:
                             pass
         elif instruction in names:
-            argument = what_to_execute["names"][argument]
+            try:
+                argument = what_to_execute["names"][argument]
+            except Exception as e:
+                print(e)
+                print(argument)
+                print(what_to_execute)
+                exit()
         
         return argument
     

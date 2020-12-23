@@ -149,16 +149,21 @@ class AssignVariable(Ast):
         global local_counter
         self.value.compile()
         instructions["instructions"].append(("DEFINE_LOCAL", local_counter))
+        instructions["names"].append(self.name)
         variable_value.locals[self.name] = local_counter
         local_counter += 1
 
 
 class GetVariable(Ast):
-    def __init__(self, name):
+    def __init__(self, name, index=None):
         self.name = name
+        self.index = index
 
     def compile(self):
-        instructions["instructions"].append(("LOAD_LOCAL", variable_value.locals[self.name]))
+        if self.index is not None:
+            instructions["instructions"].append(("LOAD_INDEX", variable_value.locals[self.name]))
+        else:
+            instructions["instructions"].append(("LOAD_LOCAL", variable_value.locals[self.name]))
 
 
 class GetIndexValue():
