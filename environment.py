@@ -47,7 +47,7 @@ class Env():
             raise Exception(f"Function {name} not found")
 
     def get_array_index(self, name, index):
-        return self.variables[name]
+        return self.variables[name][index]
     
     def get_dict_keys(self, name):
         return [key for key in self.variables[name].keys()]

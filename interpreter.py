@@ -63,27 +63,26 @@ class Machine:
     
     def parse_argument(self, instruction, argument, what_to_execute):
         values = ["LOAD_VALUE"]
-        names = ["LOAD_NAME", "STORE_NAME"]     
-        index = ["LOAD_INDEX"]   
+        names = ["LOAD_LOCAL", "DEFINE_LOCAL", "LOAD_INDEX"]     
         if instruction in values:
             try:
-                argument = what_to_execute["numbers"][argument]
+                argument = what_to_execute["arrays"][argument]
                 try:
-                    what_to_execute["numbers"].remove(what_to_execute["numbers"][0])
+                    what_to_execute["arrays"].remove(what_to_execute["arrays"][0])
                 except:
                     pass
             except:
                 try:
-                    argument = what_to_execute["strings"][argument]
+                    argument = what_to_execute["numbers"][argument]
                     try:
-                        what_to_execute["strings"].remove(what_to_execute["strings"][0])
+                        what_to_execute["numbers"].remove(what_to_execute["numbers"][0])
                     except:
-                        pass
+                            pass
                 except:
                     try:
-                        argument = what_to_execute["arrays"][argument]
+                        argument = what_to_execute["strings"][argument]
                         try:
-                            what_to_execute["arrays"].remove(what_to_execute["arrays"][0])
+                            what_to_execute["strings"].remove(what_to_execute["strings"][0])
                         except:
                             pass
                     except:
@@ -92,10 +91,9 @@ class Machine:
                             what_to_execute["dicts"].remove(what_to_execute["dicts"][0])
                         except:
                             pass
-        # elif instruction in names:
-        #     argument = what_to_execute["names"][argument]
-        # elif instruction in index:
-        #     argument = what_to_execute["names"][argument]
+                        
+        elif instruction in names:
+            argument = what_to_execute["names"][argument]
         
         return argument
     
@@ -152,5 +150,4 @@ tree = parser.parse(lite_code)
 x = LiteTransformer().transform(tree)
 x.compile()
 interpreter = Machine(Env())
-print(instructions)
 interpreter.execute(instructions)
