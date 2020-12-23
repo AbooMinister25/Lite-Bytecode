@@ -63,7 +63,8 @@ class Machine:
     
     def parse_argument(self, instruction, argument, what_to_execute):
         values = ["LOAD_VALUE"]
-        names = ["LOAD_NAME", "STORE_NAME", "LOAD_INDEX"]        
+        names = ["LOAD_NAME", "STORE_NAME"]     
+        index = ["LOAD_INDEX"]   
         if instruction in values:
             try:
                 argument = what_to_execute["numbers"][argument]
@@ -91,14 +92,10 @@ class Machine:
                             what_to_execute["dicts"].remove(what_to_execute["dicts"][0])
                         except:
                             pass
-        elif instruction in names:
-            try:
-                argument = what_to_execute["names"][argument]
-            except Exception as e:
-                print(e)
-                print(argument)
-                print(what_to_execute)
-                exit()
+        # elif instruction in names:
+        #     argument = what_to_execute["names"][argument]
+        # elif instruction in index:
+        #     argument = what_to_execute["names"][argument]
         
         return argument
     
@@ -155,4 +152,5 @@ tree = parser.parse(lite_code)
 x = LiteTransformer().transform(tree)
 x.compile()
 interpreter = Machine(Env())
+print(instructions)
 interpreter.execute(instructions)

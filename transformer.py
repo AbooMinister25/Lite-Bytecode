@@ -55,7 +55,7 @@ class LiteTransformer(Transformer):
         return GetVariable(name)
     
     def get_index_value(self, name, index):
-        return GetIndexValue(name, index)
+        return GetVariable(name, index)
     
     def start(self, *statements):
         return Start(statements)

@@ -161,6 +161,7 @@ class GetVariable(Ast):
 
     def compile(self):
         if self.index is not None:
+            self.index.compile()
             instructions["instructions"].append(("LOAD_INDEX", variable_value.locals[self.name]))
         else:
             instructions["instructions"].append(("LOAD_LOCAL", variable_value.locals[self.name]))
