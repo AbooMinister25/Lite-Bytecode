@@ -154,6 +154,29 @@ class AssignVariable(Ast):
         local_counter += 1
 
 
+class AssignVarOp(Ast):
+    def __init__(self, name, expr1, expr2, op):
+        self.name = name
+        self.expr1 = expr1
+        self.expr2 = expr2
+        self.op = op
+    
+    def compile(self):
+        global local_counter
+        self.expr1.compile()
+        self.expr2.compile()
+        if self.op == "+":
+            instructions["instructions"].append(("ADD_TWO_VALUES", None))
+        if self.op == "-":
+            instructions["instructions"].append(("SUB_TWO_VALUES", None))
+        if self.op == "/":
+            instructions["instructions"].append(("DIV_TWO_VALUES", None))
+        if self.op == "*":
+            instructions["instructions"].append(("MUL_TWO_VALUES", None))
+        instructions["instructions"].append(("DEFINE_LOCAL", local_counter))
+        local_counter += 1
+
+
 class GetVariable(Ast):
     def __init__(self, name, index=None):
         self.name = name

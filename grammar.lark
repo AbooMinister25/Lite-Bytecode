@@ -11,6 +11,7 @@ start: expr*
           | NAME "=" "input" "(" expr ")" ";" -> var_input_statement
           | NAME "=" NAME "(" ")" ";"         -> var_function_statement
           | NAME "[" expr "]" "=" expr ";"    -> assign_dict_value
+          | NAME "=" expr "+" expr            -> var_add_value
           | "if" expr "==" expr  block  -> if_statement
           | "if" expr "==" expr block "else" block -> if_else_statement
           | "if" expr "==" expr "or" expr "==" expr block -> or_if_statement

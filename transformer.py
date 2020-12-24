@@ -51,6 +51,9 @@ class LiteTransformer(Transformer):
     def assign_var(self, name, value):
         return AssignVariable(name, value)
     
+    def var_add_value(self, name, expr1, expr2):
+        return AssignVarOp(name, expr1, expr2, "+")
+    
     def get_var(self, name):
         return GetVariable(name)
     
