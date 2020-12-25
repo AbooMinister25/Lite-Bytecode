@@ -21,6 +21,7 @@ class Machine:
         input(answer)
     
     def DEFINE_LOCAL(self, name):
+        print(self.stack)
         value = self.stack[-1]
         self.env.assign_variable(name, value)
     
@@ -29,6 +30,7 @@ class Machine:
         self.stack.append(val)
     
     def LOAD_INDEX(self, name):
+        print(self.stack)
         self.stack.append(self.env.get_array_index(name, self.stack.pop()))
     
     def ADD_TWO_VALUES(self):
@@ -63,7 +65,7 @@ class Machine:
     
     def parse_argument(self, instruction, argument, what_to_execute):
         values = ["LOAD_VALUE"]
-        names = ["LOAD_LOCAL", "DEFINE_LOCAL", "LOAD_INDEX"]     
+        names = ["LOAD_LOCAL", "DEFINE_LOCAL", "LOAD_INDEX"]
         if instruction in values:
             try:
                 argument = what_to_execute["arrays"][argument]
@@ -150,5 +152,4 @@ tree = parser.parse(lite_code)
 x = LiteTransformer().transform(tree)
 x.compile()
 interpreter = Machine(Env())
-print(instructions)
 interpreter.execute(instructions)

@@ -35,7 +35,7 @@ class BinOp(Ast):
     def compile(self):
         instructions["instructions"].append(("LOAD_VALUE", 0))
         instructions["numbers"].append(self.left)
-        instructions["instructions"].append(("LOAD_VALUE", 1))
+        instructions["instructions"].append(("LOAD_VALUE", 0))
         instructions["numbers"].append(self.right)
         if self.op == "+":
             instructions["instructions"].append(("ADD_TWO_VALUES", None))
@@ -154,29 +154,6 @@ class AssignVariable(Ast):
         local_counter += 1
 
 
-class AssignVarOp(Ast):
-    def __init__(self, name, expr1, expr2, op):
-        self.name = name
-        self.expr1 = expr1
-        self.expr2 = expr2
-        self.op = op
-    
-    def compile(self):
-        global local_counter
-        self.expr1.compile()
-        self.expr2.compile()
-        if self.op == "+":
-            instructions["instructions"].append(("ADD_TWO_VALUES", None))
-        if self.op == "-":
-            instructions["instructions"].append(("SUB_TWO_VALUES", None))
-        if self.op == "/":
-            instructions["instructions"].append(("DIV_TWO_VALUES", None))
-        if self.op == "*":
-            instructions["instructions"].append(("MUL_TWO_VALUES", None))
-        instructions["instructions"].append(("DEFINE_LOCAL", local_counter))
-        local_counter += 1
-
-
 class GetVariable(Ast):
     def __init__(self, name, index=None):
         self.name = name
@@ -185,9 +162,11 @@ class GetVariable(Ast):
     def compile(self):
         if self.index is not None:
             self.index.compile()
-            instructions["instructions"].append(("LOAD_INDEX", variable_value.locals[self.name]))
+            instructions["instructions"].append(
+                ("LOAD_INDEX", variable_value.locals[self.name]))
         else:
-            instructions["instructions"].append(("LOAD_LOCAL", variable_value.locals[self.name]))
+            instructions["instructions"].append(
+                ("LOAD_LOCAL", variable_value.locals[self.name]))
 
 
 class GetIndexValue():
